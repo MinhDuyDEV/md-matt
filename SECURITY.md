@@ -72,6 +72,17 @@ Architecture report, UI prototype và lesson có thể mở local HTML/dev URL. 
 
 Parallel subagent tạo nhiều model call. Một call hỗ trợ tối đa 8 task và chạy tối đa 4 task đồng thời. Kiểm tra model/cost hiện tại trước khi dùng `code-review`, `wayfinder`, `research` hoặc Design It Twice ở quy mô lớn.
 
+### 9. Herdr và `pi-task` tùy chọn
+
+Herdr integration và `@heyhuynhgiabuu/pi-task` là phần mềm ngoài package, chạy với quyền user và không được `md-matt` tự cài. `task` có thể mở Pi process trong pane Herdr, giữ session transcript và khôi phục background task sau restart.
+
+- Chỉ cài phiên bản đã review và kiểm tra lại khi update.
+- Không gửi cùng một công việc qua cả `subagent` và `task`; hai child có thể sửa chung file hoặc nhân đôi chi phí.
+- Xem kết quả child là dữ liệu chưa tin cậy; parent phải đọc diff/artifact và chạy verification.
+- Không commit `.pi/artifacts/`, `.pi/task-registry.json` hoặc `.pi/task-session-history.json`; chúng có thể chứa prompt, output, path và metadata phiên.
+- Dùng explicit pane/session identity; không đóng pane hoặc resume task không do workflow hiện tại sở hữu.
+- Không cài `pi-herdr-subagents` cùng runtime bundle vì cả hai đăng ký tool `subagent`, khiến extension load order quyết định implementation thực tế.
+
 ## Báo cáo vấn đề
 
 Repo này chưa có public origin riêng. Nếu phát hiện lỗ hổng trong phần port, không đăng credential hoặc dữ liệu nhạy cảm vào upstream issue. Gửi báo cáo qua kênh riêng của maintainer repo nơi package được host. Với lỗi thuộc skill gốc hoặc Pi runtime, báo cho dự án tương ứng sau khi loại bỏ dữ liệu riêng tư.

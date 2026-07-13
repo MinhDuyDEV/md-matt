@@ -1,3 +1,6 @@
 node_modules
 .pi/tasks/
+.pi/artifacts/
+.pi/task-registry.json
+.pi/task-session-history.json
 *.tgz

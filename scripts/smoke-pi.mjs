@@ -49,7 +49,7 @@ try {
       `export default function (pi) {\n` +
       `  pi.on("resources_discover", () => {\n` +
       `    fs.writeFileSync(process.env.MD_MATT_PROBE, JSON.stringify({\n` +
-      `      tools: pi.getAllTools().map((tool) => ({ name: tool.name, sourceInfo: tool.sourceInfo })),\n` +
+      `      tools: pi.getAllTools().map((tool) => ({ name: tool.name, sourceInfo: tool.sourceInfo, promptGuidelines: tool.promptGuidelines })),\n` +
       `      commands: pi.getCommands().map((command) => ({ name: command.name, source: command.source, sourceInfo: command.sourceInfo, description: command.description })),\n` +
       `    }));\n` +
       `  });\n` +
@@ -78,8 +78,11 @@ try {
 
   if (packageSkills.length !== 22) throw new Error(`expected 22 discovered package skills, found ${packageSkills.length}`);
   if (!subagent) throw new Error("subagent tool was not registered from md-matt");
+  if (!subagent.promptGuidelines?.some((guideline) => guideline.includes("prefer task for long-running"))) {
+    throw new Error("subagent prompt guidelines do not expose the optional task routing boundary");
+  }
 
-  console.log("Pi smoke test passed: 22 skills and the subagent tool were discovered in an isolated config.");
+  console.log("Pi smoke test passed: 22 skills and the guarded subagent tool were discovered in an isolated config.");
 } finally {
   fs.rmSync(tempRoot, { recursive: true, force: true });
 }

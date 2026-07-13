@@ -109,6 +109,19 @@ Nếu agent definition không pin model, child kế thừa provider/model và th
 
 Tool allowlist không phải sandbox tuyệt đối: `bash` vẫn có quyền của user. Xem [SECURITY.md](../SECURITY.md).
 
+### Routing tùy chọn với Herdr và `pi-task`
+
+Runtime bundle giữ vai trò primitive **blocking, có cấu trúc**. Nó không mở pane Herdr và không ghi session child vì `--no-session`. Khi môi trường cài riêng tool `task` từ `@heyhuynhgiabuu/pi-task`, parent dùng ranh giới sau:
+
+- `subagent`: task ngắn cần output inline, parallel fan-out hoặc chain `{previous}`;
+- `task`: task dài cần background execution, pane Herdr, durable conversation hoặc restore;
+- không spawn cùng một unit of work qua cả hai runtime;
+- bất kể runtime nào, parent là nơi tổng hợp và xác minh cuối cùng.
+
+Integration là tùy chọn và một chiều: `md-matt` chỉ quảng bá conditional routing qua tool guidance, không import, bundle hay tự cài `pi-task`/Herdr. Baseline ngoài repo đã audit là `@heyhuynhgiabuu/pi-task@0.3.0`; update external package phải được review độc lập. `pi-herdr-subagents` không được cài đồng thời vì đăng ký trùng tên `subagent`.
+
+Herdr integration chính thức ghi lifecycle extension vào Pi config của user. `pi-task` lưu durable state dưới `.pi/artifacts/`, `.pi/task-registry.json` và `.pi/task-session-history.json`; repository ignore các path này để session transcript và task prompt không bị commit ngoài ý muốn.
+
 ## Mapping các capability gap
 
 | Upstream assumption | Pi-native mapping |

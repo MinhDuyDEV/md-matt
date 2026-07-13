@@ -112,6 +112,26 @@ Năm agent bundle sẵn:
 
 Xem chi tiết về precedence, scope và giới hạn song song tại [docs/architecture.vi.md](docs/architecture.vi.md).
 
+## Herdr và `pi-task` (tùy chọn)
+
+`md-matt` không hard-depend vào terminal multiplexer hay một package điều phối bên ngoài. Nếu cần task dài, chạy nền, quan sát được trong Herdr và có thể resume, có thể cài riêng integration chính thức cùng phiên bản `pi-task` đã audit:
+
+```bash
+herdr integration install pi
+pi install npm:@heyhuynhgiabuu/pi-task@0.3.0
+```
+
+Hai tool có ranh giới rõ ràng:
+
+| Tool | Dùng khi |
+|---|---|
+| `subagent` | Công việc ngắn, blocking, cần kết quả inline hoặc orchestration single/parallel/chain có cấu trúc. Child process không tạo pane Herdr riêng. |
+| `task` | Công việc dài, foreground/background, cần pane Herdr quan sát được, session bền và restore sau restart. |
+
+Không giao cùng một công việc cho cả hai tool. Parent vẫn phải đọc artifact/diff và tự chạy verification trước khi chấp nhận kết quả. Không cài `pi-herdr-subagents` song song với package này vì extension đó cũng đăng ký tên tool `subagent`; tránh giữ thêm runtime delegation khác nếu không có routing policy riêng.
+
+`pi-task` và Herdr là dependency vận hành tùy chọn, không được bundle hoặc tự cài bởi `md-matt`. Session/registry của integration nằm dưới `.pi/artifacts/`, `.pi/task-registry.json` và `.pi/task-session-history.json`; các path này được ignore khỏi git.
+
 ## Phụ thuộc tùy workflow
 
 - Pi Coding Agent `>= 0.80.6` là baseline đã kiểm chứng.

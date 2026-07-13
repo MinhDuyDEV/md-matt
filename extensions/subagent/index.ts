@@ -468,6 +468,11 @@ export default function (pi: ExtensionAPI) {
 			`Package agents are always available; user agents from ${path.join(getAgentDir(), "agents")} may override them.`,
 			`Project-local agents in ${CONFIG_DIR_NAME}/agents require agentScope "both" (or "project") and mandatory interactive confirmation.`,
 		].join(" "),
+		promptSnippet: "Delegate short, structured child Pi work in blocking single, parallel, or chain mode",
+		promptGuidelines: [
+			"Use subagent for short, structured, blocking delegation that benefits from inline single, parallel, or chain aggregation.",
+			"When a separate task tool is available, prefer task for long-running, background, Herdr-observable, or resumable work; never launch the same work through both tools.",
+		],
 		parameters: SubagentParams,
 
 		async execute(_toolCallId, params, signal, onUpdate, ctx) {

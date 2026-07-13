@@ -188,9 +188,22 @@ for (const extension of extensionPaths) {
 }
 
 const subagentText = fs.readFileSync(path.join(root, "extensions", "subagent", "index.ts"), "utf8");
+let optionalRoutingValid = true;
+const failOptionalRouting = (message) => {
+  optionalRoutingValid = false;
+  fail(message);
+};
 if (subagentText.includes("confirmProjectAgents")) fail("subagent must not expose a model-controlled confirmation bypass");
 if (!subagentText.includes("project-local agents require interactive confirmation")) {
   fail("subagent must refuse project agents when interactive confirmation is unavailable");
+}
+const routingGuidance = [
+  "Use subagent for short, structured, blocking delegation",
+  "When a separate task tool is available, prefer task for long-running, background, Herdr-observable, or resumable work",
+  "never launch the same work through both tools",
+];
+for (const guidance of routingGuidance) {
+  if (!subagentText.includes(guidance)) failOptionalRouting(`subagent routing guidance is missing: ${guidance}`);
 }
 
 const aliasesText = fs.existsSync(path.join(root, "extensions", "aliases.ts"))
@@ -233,6 +246,31 @@ if (packageJson.dependencies && Object.keys(packageJson.dependencies).length > 0
   fail("Pi core imports must not be bundled as runtime dependencies");
 }
 if (packageJson.bundledDependencies) fail("bundledDependencies must not be set for Pi core packages");
+
+const optionalRuntimePackages = ["@heyhuynhgiabuu/pi-task", "pi-herdr-subagents"];
+for (const packageName of optionalRuntimePackages) {
+  for (const section of ["dependencies", "optionalDependencies", "peerDependencies", "bundledDependencies"]) {
+    const entries = packageJson[section];
+    if (Array.isArray(entries) ? entries.includes(packageName) : entries?.[packageName]) {
+      failOptionalRouting(`${packageName} must remain an external optional integration, not package.json#${section}`);
+    }
+  }
+}
+const gitignore = fs.readFileSync(path.join(root, ".gitignore"), "utf8").split(/\r?\n/);
+for (const artifactPath of [".pi/artifacts/", ".pi/task-registry.json", ".pi/task-session-history.json"]) {
+  if (!gitignore.includes(artifactPath)) {
+    failOptionalRouting(`.gitignore must exclude optional task runtime artifact: ${artifactPath}`);
+  }
+}
+const readmeText = fs.readFileSync(path.join(root, "README.md"), "utf8");
+const architectureText = fs.readFileSync(path.join(root, "docs", "architecture.vi.md"), "utf8");
+if (!readmeText.includes("## Herdr và `pi-task` (tùy chọn)")) {
+  failOptionalRouting("README must document optional Herdr/pi-task routing");
+}
+if (!architectureText.includes("### Routing tùy chọn với Herdr và `pi-task`")) {
+  failOptionalRouting("architecture docs must define the optional Herdr/pi-task boundary");
+}
+if (optionalRoutingValid) note("optional Herdr task routing stays external, explicit, and artifact-safe");
 
 const auditFile = path.join(root, "docs", "port-audit.vi.md");
 if (!fs.existsSync(auditFile)) {
