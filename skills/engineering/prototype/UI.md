@@ -2,6 +2,8 @@
 
 Generate **several radically different UI variations** on a single route, switchable from a floating bottom bar. The user flips between variants in the browser, picks one (or steals bits from each), then throws the rest away.
 
+Pi has no built-in browser requirement for this workflow. Build against the project's normal dev server, surface the exact URL, and let the user open it manually when an OS opener or browser tool is unavailable.
+
 If the question is about logic/state rather than what something looks like — wrong branch. Use [LOGIC.md](LOGIC.md).
 
 ## When this is the right shape
@@ -93,7 +95,7 @@ Put the switcher in a single shared component so both sub-shapes can reuse it. L
 
 ### 5. Hand it over
 
-Surface the URL (and the `?variant=` keys). The user will flip through whenever they get to it. The interesting feedback is usually **"I want the header from B with the sidebar from C"** — that's the actual design they want.
+Start the prototype with the project's existing dev command and surface the exact URL plus the `?variant=` keys. Try the platform opener when available (`open` on macOS, `xdg-open` on Linux, `cmd.exe /c start ""` on Windows), but do not fail when it is absent — ask the user to open the URL manually. The user will flip through whenever they get to it. The interesting feedback is usually **"I want the header from B with the sidebar from C"** — that's the actual design they want.
 
 ### 6. Capture the answer and clean up
 

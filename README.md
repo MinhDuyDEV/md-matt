@@ -1,186 +1,145 @@
-<p>
-  <a href="https://www.aihero.dev/s/skills-newsletter">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skills-repo-dark_2x.png">
-      <source media="(prefers-color-scheme: light)" srcset="https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png">
-      <img alt="Skills" src="https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png" width="369">
-    </picture>
-  </a>
-</p>
+# md-matt
 
-# Skills For Real Engineers
+Bản port **Pi-native** của bộ [Skills for Real Engineers](https://github.com/mattpocock/skills) do Matt Pocock phát hành theo giấy phép MIT.
 
-[![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)
+Mục tiêu của repo này không chỉ là làm cho `SKILL.md` “được Pi nhận diện”, mà còn giữ đúng hành vi của các workflow gốc trên Pi:
 
-My agent skills that I use every day to do real engineering - not vibe coding.
+- nạp đúng **22 skill promoted**;
+- giữ 17 skill misc/personal/in-progress/deprecated trong lịch sử nguồn nhưng không tự động nạp;
+- chuyển lời gọi chéo sang `/skill:<name>`;
+- cung cấp alias ngắn `/<name>` khi không xung đột;
+- bundle runtime subagent cô lập/song song dựa trên child Pi process;
+- thêm guardrail cho commit, merge/rebase, file tạm, workspace dạy học và browser fallback.
 
-Developing real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.
+> [!WARNING]
+> Pi skills có thể yêu cầu agent chạy lệnh hoặc sửa file; extensions chạy với toàn quyền của tiến trình người dùng. Hãy đọc [SECURITY.md](SECURITY.md) trước khi cài.
 
-These skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on decades of engineering experience. Hack around with them. Make them your own. Enjoy.
+## Cài đặt
 
-If you want to keep up with changes to these skills, and any new ones I create, you can join ~60,000 other devs on my newsletter:
+### Dùng trực tiếp từ workspace này
 
-[Sign Up To The Newsletter](https://www.aihero.dev/s/skills-newsletter)
-
-## Quickstart (30-second setup)
-
-1. Run the skills.sh installer:
+Chạy từ root của clone `md-matt`:
 
 ```bash
-npx skills@latest add mattpocock/skills
+pi install .
 ```
 
-2. Pick the skills you want, and which coding agents you want to install them on. **Make sure you select `/setup-matt-pocock-skills`**.
+Cài ở phạm vi project:
 
-3. Run `/setup-matt-pocock-skills` in your agent. It will:
-   - Ask you which issue tracker you want to use (GitHub, Linear, or local files)
-   - Ask you what labels you apply to tickets when you triage them (`/triage` uses labels)
-   - Ask you where you want to save any docs we create
+```bash
+pi install -l <path-to-md-matt>
+```
 
-4. Bam - you're ready to go.
+Chạy thử trong một phiên mà không ghi vào settings:
 
-## Why These Skills Exist
+```bash
+pi -e <path-to-md-matt>
+```
 
-I built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.
+Sau khi package được đẩy lên một Git remote, có thể dùng cú pháp chuẩn của Pi:
 
-### #1: The Agent Didn't Do What I Want
+```bash
+pi install git:<host>/<owner>/<repo>
+```
 
-> "No-one knows exactly what they want"
->
-> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)
+Khởi động lại Pi hoặc chạy `/reload`, sau đó cấu hình repo đích:
 
-**The Problem**. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all.
+```text
+/skill:setup-matt-pocock-skills
+```
 
-This is just the same in the AI age. There is a communication gap between you and the agent. The fix for this is a **grilling session** - getting the agent to ask you detailed questions about what you're building.
+Nếu alias không xung đột với command/prompt đã có, dạng ngắn cũng hoạt động:
 
-**The Fix** is to use:
+```text
+/setup-matt-pocock-skills
+```
 
-- [`/grill-me`](./skills/productivity/grill-me/SKILL.md) - for non-code uses
-- [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md) - same as [`/grill-me`](./skills/productivity/grill-me/SKILL.md), but adds more goodies (see below)
+## 22 skill được nạp
 
-These are my most popular skills. They help you align with the agent before you get started, and think deeply about the change you're making. Use them _every_ time you want to make a change.
+### Engineering — user-invoked
 
-### #2: The Agent Is Way Too Verbose
+| Skill | Mục đích |
+|---|---|
+| [`ask-matt`](skills/engineering/ask-matt/SKILL.md) | Chọn flow phù hợp |
+| [`grill-with-docs`](skills/engineering/grill-with-docs/SKILL.md) | Phỏng vấn sâu và cập nhật domain docs |
+| [`triage`](skills/engineering/triage/SKILL.md) | Triage issue/PR theo state machine |
+| [`improve-codebase-architecture`](skills/engineering/improve-codebase-architecture/SKILL.md) | Tìm cơ hội làm module sâu hơn |
+| [`setup-matt-pocock-skills`](skills/engineering/setup-matt-pocock-skills/SKILL.md) | Thiết lập tracker, label và domain docs |
+| [`to-spec`](skills/engineering/to-spec/SKILL.md) | Tổng hợp hội thoại thành spec |
+| [`to-tickets`](skills/engineering/to-tickets/SKILL.md) | Chia spec thành tracer-bullet tickets |
+| [`implement`](skills/engineering/implement/SKILL.md) | Implement theo TDD rồi review |
+| [`wayfinder`](skills/engineering/wayfinder/SKILL.md) | Lập bản đồ quyết định cho effort nhiều phiên |
 
-> With a ubiquitous language, conversations among developers and expressions of the code are all derived from the same domain model.
->
-> Eric Evans, [Domain-Driven-Design](https://www.amazon.co.uk/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215)
+### Engineering — model-invoked
 
-**The Problem**: At the start of a project, devs and the people they're building the software for (the domain experts) are usually speaking different languages.
-
-I felt the same tension with my agents. Agents are usually dropped into a project and asked to figure out the jargon as they go. So they use 20 words where 1 will do.
-
-**The Fix** for this is a shared language. It's a document that helps agents decode the jargon used in the project.
-
-<details>
-<summary>
-Example
-</summary>
-
-Here's an example [`CONTEXT.md`](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md), from my `course-video-manager` repo. Which one is easier to read?
-
-- **BEFORE**: "There's a problem when a lesson inside a section of a course is made 'real' (i.e. given a spot in the file system)"
-- **AFTER**: "There's a problem with the materialization cascade"
-
-This concision pays off session after session.
-
-</details>
-
-This is built into [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md). It's a grilling session, but that helps you build a shared language with the AI, and document hard-to-explain decisions in ADR's.
-
-It's hard to explain how powerful this is. It might be the single coolest technique in this repo. Try it, and see.
-
-> [!TIP]
-> A shared language has many other benefits than reducing verbosity:
->
-> - **Variables, functions and files are named consistently**, using the shared language
-> - As a result, the **codebase is easier to navigate** for the agent
-> - The agent also **spends fewer tokens on thinking**, because it has access to a more concise language
-
-### #3: The Code Doesn't Work
-
-> "Always take small, deliberate steps. The rate of feedback is your speed limit. Never take on a task that’s too big."
->
-> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)
-
-**The Problem**: Let's say that you and the agent are aligned on what to build. What happens when the agent _still_ produces crap?
-
-It's time to look at your feedback loops. Without feedback on how the code it produces actually runs, the agent will be flying blind.
-
-**The Fix**: You need the usual tranche of feedback loops: static types, browser access, and automated tests.
-
-For automated tests, a red-green-refactor loop is critical. This is where the agent writes a failing test first, then fixes the test. This helps give the agent a consistent level of feedback that results in far better code.
-
-I've built a **[`/tdd`](./skills/engineering/tdd/SKILL.md) skill** you can slot into any project. It encourages red-green-refactor and gives the agent plenty of guidance on what makes good and bad tests.
-
-For debugging, I've also built a **[`/diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md)** skill that wraps best debugging practices into a simple loop.
-
-### #4: We Built A Ball Of Mud
-
-> "Invest in the design of the system _every day_."
->
-> Kent Beck, [Extreme Programming Explained](https://www.amazon.co.uk/Extreme-Programming-Explained-Embrace-Change/dp/0321278658)
-
-> "The best modules are deep. They allow a lot of functionality to be accessed through a simple interface."
->
-> John Ousterhout, [A Philosophy Of Software Design](https://www.amazon.co.uk/Philosophy-Software-Design-2nd/dp/173210221X)
-
-**The Problem**: Most apps built with agents are complex and hard to change. Because agents can radically speed up coding, they also accelerate software entropy. Codebases get more complex at an unprecedented rate.
-
-**The Fix** for this is a radical new approach to AI-powered development: caring about the design of the code.
-
-This is built in to every layer of these skills:
-
-- [`/to-spec`](./skills/engineering/to-spec/SKILL.md) quizzes you about which modules you're touching before creating a spec
-
-And crucially, [`/improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) helps you rescue a codebase that has become a ball of mud. I recommend running it on your codebase once every few days.
-
-### Summary
-
-Software engineering fundamentals matter more than ever. These skills are my best effort at condensing these fundamentals into repeatable practices, to help you ship the best apps of your career. Enjoy.
-
-## Reference
-
-These split on one axis — who can invoke them. **User-invoked** skills are reachable only when you type them (e.g. `/grill-me`); their job is to orchestrate. **Model-invoked** skills can be invoked by you _or_ reached for automatically by the agent when the task fits; they hold the reusable discipline. A user-invoked skill may invoke model-invoked skills, but never another user-invoked one.
-
-### Engineering
-
-Skills I use daily for code work.
-
-**User-invoked**
-
-- **[ask-matt](./skills/engineering/ask-matt/SKILL.md)** — Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.
-- **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)** — Grilling session that also builds your project's domain model, sharpening terminology and updating `CONTEXT.md` and ADRs inline.
-- **[triage](./skills/engineering/triage/SKILL.md)** — Move issues through a state machine of triage roles.
-- **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)** — Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.
-- **[setup-matt-pocock-skills](./skills/engineering/setup-matt-pocock-skills/SKILL.md)** — Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout). Run once per repo before using the other engineering skills.
-- **[to-spec](./skills/engineering/to-spec/SKILL.md)** — Turn the current conversation into a spec and publish it to the issue tracker. No interview — just synthesizes what you've already discussed.
-- **[to-tickets](./skills/engineering/to-tickets/SKILL.md)** — Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges — written as text in a local file, or as native blocking links on a real tracker.
-- **[implement](./skills/engineering/implement/SKILL.md)** — Build the work described by a spec or set of tickets, driving `/tdd` at pre-agreed seams and closing out with `/code-review` before committing.
-- **[wayfinder](./skills/engineering/wayfinder/SKILL.md)** — Plan a huge chunk of work, more than one agent session can hold, as a shared map of investigation tickets on the issue tracker — resolve them one at a time until the way to the destination is clear.
-
-**Model-invoked**
-
-- **[prototype](./skills/engineering/prototype/SKILL.md)** — Build a throwaway prototype to answer a design question — a runnable terminal app for state/logic questions, or several radically different UI variations toggleable from one route.
-- **[diagnosing-bugs](./skills/engineering/diagnosing-bugs/SKILL.md)** — Disciplined diagnosis loop for hard bugs and performance regressions: reproduce → minimise → hypothesise → instrument → fix → regression-test.
-- **[research](./skills/engineering/research/SKILL.md)** — Investigate a question against high-trust primary sources and capture the findings as a cited Markdown file in the repo, run as a background agent.
-- **[tdd](./skills/engineering/tdd/SKILL.md)** — Test-driven development with a red-green-refactor loop. Builds features or fixes bugs one vertical slice at a time.
-- **[domain-modeling](./skills/engineering/domain-modeling/SKILL.md)** — Actively build and sharpen a project's domain model — challenge terms against the glossary, stress-test with edge-case scenarios, and update `CONTEXT.md` and ADRs inline.
-- **[codebase-design](./skills/engineering/codebase-design/SKILL.md)** — Shared discipline and vocabulary for designing deep modules: a lot of behaviour behind a small interface, placed at a clean seam, testable through that interface.
-- **[code-review](./skills/engineering/code-review/SKILL.md)** — Two-axis review of the diff since a fixed point: **Standards** (does it follow the repo's coding standards, plus a Fowler smell baseline?) and **Spec** (does it faithfully implement the originating issue/PRD?), run as parallel sub-agents so neither pollutes the other.
-- **[resolving-merge-conflicts](./skills/engineering/resolving-merge-conflicts/SKILL.md)** — Work through an in-progress git merge or rebase conflict hunk by hunk, resolving by intent traced to each side's primary source, then finish the operation — never `--abort`.
+| Skill | Mục đích |
+|---|---|
+| [`prototype`](skills/engineering/prototype/SKILL.md) | Prototype logic hoặc nhiều biến thể UI |
+| [`diagnosing-bugs`](skills/engineering/diagnosing-bugs/SKILL.md) | Vòng lặp chẩn đoán bug có feedback chặt |
+| [`research`](skills/engineering/research/SKILL.md) | Nghiên cứu nguồn sơ cấp bằng child agent |
+| [`tdd`](skills/engineering/tdd/SKILL.md) | Red → green theo từng vertical slice |
+| [`domain-modeling`](skills/engineering/domain-modeling/SKILL.md) | Làm sắc domain language và ADR |
+| [`codebase-design`](skills/engineering/codebase-design/SKILL.md) | Thiết kế deep module và seam |
+| [`code-review`](skills/engineering/code-review/SKILL.md) | Review độc lập theo Standards và Spec |
+| [`resolving-merge-conflicts`](skills/engineering/resolving-merge-conflicts/SKILL.md) | Resolve merge/rebase theo intent |
 
 ### Productivity
 
-General workflow tools, not code-specific.
+| Skill | Invocation | Mục đích |
+|---|---|---|
+| [`grill-me`](skills/productivity/grill-me/SKILL.md) | User | Phỏng vấn sâu cho kế hoạch không cần codebase |
+| [`handoff`](skills/productivity/handoff/SKILL.md) | User | Tạo handoff đã redaction trong thư mục tạm |
+| [`teach`](skills/productivity/teach/SKILL.md) | User | Workspace học tập có trạng thái |
+| [`writing-great-skills`](skills/productivity/writing-great-skills/SKILL.md) | User | Vocabulary để viết skill tốt |
+| [`grilling`](skills/productivity/grilling/SKILL.md) | Model | Primitive phỏng vấn từng câu một |
 
-**User-invoked**
+User-invoked skills giữ `disable-model-invocation: true`, vì vậy model không tự kích hoạt chúng. Người dùng gọi bằng `/skill:<name>` hoặc alias ngắn. Model-invoked skills vẫn có thể được Pi tự nạp khi description khớp yêu cầu.
 
-- **[grill-me](./skills/productivity/grill-me/SKILL.md)** — Get relentlessly interviewed about a plan or design until every branch of the decision tree is resolved.
-- **[handoff](./skills/productivity/handoff/SKILL.md)** — Compact the current conversation into a handoff document so another agent can continue the work.
-- **[teach](./skills/productivity/teach/SKILL.md)** — Teach the user a new skill or concept over multiple sessions, using the current directory as a stateful teaching workspace.
-- **[writing-great-skills](./skills/productivity/writing-great-skills/SKILL.md)** — Reference for writing and editing skills well: the vocabulary and principles that make a skill predictable.
+## Runtime đi kèm
 
-**Model-invoked**
+Package đăng ký hai extension:
 
-- **[grilling](./skills/productivity/grilling/SKILL.md)** — Interview the user relentlessly about a plan, decision, or idea until every branch of the decision tree is resolved. The reusable loop behind `grill-me` and `grill-with-docs`.
+1. [`extensions/aliases.ts`](extensions/aliases.ts) — input alias `/<name>` cho 22 skill. Extension command được Pi ưu tiên trước; prompt template trùng tên được extension phát hiện và nhường lại. Alias biến đổi input sang `/skill:<name>` trước bước skill expansion; canonical command luôn là đường chuẩn và là dạng hiện trong command picker.
+2. [`extensions/subagent/index.ts`](extensions/subagent/index.ts) — child Pi process cô lập, hỗ trợ single, parallel và chain.
+
+Năm agent bundle sẵn:
+
+- `explorer` — khảo sát code read-only;
+- `planner` — lập plan/interface alternative read-only;
+- `reviewer` — review read-only;
+- `researcher` — nghiên cứu nguồn sơ cấp read-only;
+- `worker` — implement trong phạm vi được giao.
+
+Xem chi tiết về precedence, scope và giới hạn song song tại [docs/architecture.vi.md](docs/architecture.vi.md).
+
+## Phụ thuộc tùy workflow
+
+- Pi Coding Agent `>= 0.80.6` là baseline đã kiểm chứng.
+- `gh` cho GitHub tracker; `glab` cho GitLab; một số truy vấn dùng `jq`.
+- Network access cho research và CDN của HTML report.
+- Browser do người dùng mở cho UI prototype, lesson và architecture report; package có manual fallback, không yêu cầu browser tool.
+- Local-markdown tracker dưới `.scratch/` không cần CLI tracker bên ngoài.
+
+## Kiểm chứng
+
+```bash
+npm install
+npm run validate
+npm run typecheck
+npm test
+npm run pack:check
+```
+
+Validator kiểm tra inventory 39/22, frontmatter, invocation policy, link tương đối, dependency giữa skill, alias catalog, bundled agents và legacy harness tokens.
+
+## Tài liệu
+
+- [Audit đủ 39 skill](docs/port-audit.vi.md)
+- [Kiến trúc bản port](docs/architecture.vi.md)
+- [Mô hình bảo mật](SECURITY.md)
+- [Nguồn upstream và cách đồng bộ](UPSTREAM.md)
+- [Third-party notices](THIRD_PARTY_NOTICES.md)
+
+## Nguồn và giấy phép
+
+Skill gốc: Copyright © 2026 Matt Pocock, MIT. Runtime subagent được chuyển thể từ ví dụ chính thức của Pi: Copyright © 2025 Mario Zechner, MIT. Xem [LICENSE](LICENSE), [UPSTREAM.md](UPSTREAM.md) và [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

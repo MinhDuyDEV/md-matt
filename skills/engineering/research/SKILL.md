@@ -1,12 +1,21 @@
 ---
 name: research
-description: Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to a background agent.
+description: Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to an isolated child agent.
+compatibility: Requires the md-matt Pi package's subagent extension and network access when sources are not local.
 ---
 
-Spin up a **background agent** to do the research, so you keep working while it reads.
+Delegate the reading legwork to the bundled `subagent` tool in single mode:
 
-Its job:
+```json
+{
+  "agent": "researcher",
+  "task": "Investigate <question> against primary sources. Return cited findings; do not modify the repository."
+}
+```
 
-1. Investigate the question against **primary sources** — official docs, source code, specs, first-party APIs — not a secondary write-up of them. Follow every claim back to the source that owns it.
-2. Write the findings to a single Markdown file, citing each claim's source.
-3. Save it where the repo already keeps such notes; match the existing convention, and if there is none, put it somewhere sensible and say where.
+Then:
+
+1. Check that material claims in the returned report point to **primary sources** — official docs, source code, specs, or first-party APIs — rather than secondary write-ups. Separate verified facts from inference.
+2. Write the verified findings to one Markdown file, citing each claim's source. The parent agent owns this write; the researcher is read-only.
+3. Save it where the repo already keeps such notes. Match the existing convention; if there is none, choose a sensible documentation path and tell the user exactly where it was written.
+4. Never send private repository content, credentials, or personal data to an external source while researching.

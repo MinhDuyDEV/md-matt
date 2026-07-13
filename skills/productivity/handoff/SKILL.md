@@ -1,16 +1,16 @@
 ---
 name: handoff
 description: Compact the current conversation into a handoff document for another agent to pick up.
-argument-hint: "What will the next session be used for?"
 disable-model-invocation: true
+compatibility: Requires permission to create a private Markdown file in the operating system's temporary directory.
 ---
 
-Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS - not the current workspace.
+Write a handoff document summarising the current conversation so a fresh agent can continue the work.
 
-Include a "suggested skills" section in the document, which suggests skills that the agent should invoke.
+1. Resolve the OS temporary directory without writing to the workspace: prefer `$TMPDIR`, then `/tmp` on Unix; use `%TEMP%` on Windows. Create a unique `md-matt-handoff-<timestamp>.md` file with user-only permissions where the OS supports them.
+2. Include a `Suggested skills` section naming relevant canonical `/skill:<name>` commands.
+3. Do not duplicate content already captured in specs, plans, ADRs, issues, commits, or diffs. Reference those artifacts by path or URL.
+4. Before writing, scan the draft for secrets and sensitive data. Redact likely API tokens (`sk-`, `ghp_`, `github_pat_`, `AKIA`, `xoxb-`, `xoxp-`), private-key blocks, passwords, session cookies, and personally identifiable information to `[REDACTED]`. Never read unrelated files merely to enrich the handoff.
+5. Write the file, verify that it exists, and print its absolute path as the final line of the response.
 
-Do not duplicate content already captured in other artifacts (specs, plans, ADRs, issues, commits, diffs). Reference them by path or URL instead.
-
-Redact any sensitive information, such as API keys, passwords, or personally identifiable information.
-
-If the user passed arguments, treat them as a description of what the next session will focus on and tailor the doc accordingly.
+If the user passed arguments, treat them as the next session's focus and tailor the handoff accordingly.

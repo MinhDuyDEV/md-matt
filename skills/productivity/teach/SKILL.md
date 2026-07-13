@@ -2,18 +2,21 @@
 name: teach
 description: Teach the user a new skill or concept, within this workspace.
 disable-model-invocation: true
-argument-hint: "What would you like to learn about?"
+compatibility: Resource discovery needs network access or user-supplied primary sources; HTML lessons need a browser the user can open.
 ---
 
 The user has asked you to teach them something. This is a stateful request - they intend to learn the topic over multiple sessions.
 
 ## Teaching Workspace
 
-Treat the current directory as a teaching workspace. The state of their learning is captured in this directory in several files:
+Before writing, inspect the current directory. If `MISSION.md` already exists, treat it as an established teaching workspace. If the directory is non-empty with unrelated files — especially an existing software repository — stop and ask whether to use it or create a dedicated `<topic>-learning/` subdirectory. Recommend the subdirectory and do not create teaching artifacts until the user confirms.
+
+Once the workspace is confirmed, capture the state of their learning in these files:
 
 - `MISSION.md`: A document capturing the _reason_ the user is interested in the topic. This should be used to ground all teaching. Use the format in [MISSION-FORMAT.md](./MISSION-FORMAT.md).
 - `./reference/*.html`: A directory of reference materials. These are the compressed learnings from the lessons - cheat sheets, reference algorithms, syntax, yoga poses, glossaries. They are the raw units of learning. They should be beautiful documents which print out well, and are designed for quick reference.
 - `RESOURCES.md`: A list of resources which can be explored to ground your teaching in contextual knowledge, or to acquire knowledge and wisdom. Use the format in [RESOURCES-FORMAT.md](./RESOURCES-FORMAT.md).
+- `GLOSSARY.md`: The canonical language the learner has demonstrated they understand. Create and maintain it using [GLOSSARY-FORMAT.md](./GLOSSARY-FORMAT.md).
 - `./learning-records/*.md`: A directory of learning records, which capture what the user has learned. These are loosely equivalent to architectural decision records in software development - they capture non-obvious lessons and key insights that may need to be revised later, or drive future sessions. These should be used to calculate the zone of proximal development. They are titled `0001-<dash-case-name>.md`, where the number increments each time. Use the format in [LEARNING-RECORD-FORMAT.md](./LEARNING-RECORD-FORMAT.md).
 - `./lessons/*.html`: A directory of lessons. A **lesson** is a single, self-contained HTML output that teaches one tightly-scoped thing tied to the mission. This is the primary unit of teaching in this workspace.
 - `./assets/*`: Reusable **components** shared across lessons. See [Assets](#assets).
@@ -27,7 +30,7 @@ To learn at a deep level, the user needs three things:
 - **Skills**, acquired through highly-relevant interactive lessons devised by you, based on the knowledge
 - **Wisdom**, which comes from interacting with other learners and practitioners
 
-Before the `RESOURCES.md` is well-populated, your focus should be to find high-quality resources which will help the user acquire knowledge. Never trust your parametric knowledge.
+Before `RESOURCES.md` is well-populated, focus on high-quality primary resources. Use installed research or web tools when available. If no network-capable tool exists, do not substitute parametric memory for evidence: ask the user to provide URLs, books, papers, transcripts, or pasted source material and record that limitation in `RESOURCES.md`.
 
 Some topics may require more skills than knowledge. Learning more about theoretical physics might be more knowledge-based. For yoga, more skills-based.
 
@@ -52,7 +55,7 @@ A lesson should be **beautiful** — clean, readable typography and layout — s
 
 The lesson should be short, and completable very quickly. Learners' working memory is very small, and we need to stay within it. But each lesson should give the user a single tangible win that they can build on. It should be directly tied to the mission, and should be in the user's zone of proximal development.
 
-If possible, open the lesson file for the user by running a CLI command.
+If possible, open the lesson with the OS CLI (`open`, `xdg-open`, or `cmd.exe /c start ""`). If no opener is available, give the user the absolute path and ask them to open it manually.
 
 Each lesson should link via HTML anchors to other lessons and reference documents.
 
@@ -117,7 +120,7 @@ When the user asks a question that appears to require wisdom, your default postu
 
 A community is a place (online or offline) where the user can test their skills in the real world. This might be a forum, a subreddit, a real-world class (budget permitting) or a local interest group.
 
-You should attempt to find high-reputation communities the user can join. If the user expresses a preference that they don't want to join a community, respect it.
+Attempt to find high-reputation communities with the same source discipline used for resources. If no network tool is available, ask the user for communities they already trust rather than inventing recommendations. If the user does not want to join a community, respect it.
 
 ## Reference Documents
 
@@ -133,7 +136,7 @@ Some learning topics lend themselves to reference:
 - Exercises and routines for fitness
 - Glossaries for any topic with its own nomenclature
 
-Glossaries, in particular, are an essential reference. Once one is created, it should be adhered to in every lesson.
+Glossaries, in particular, are an essential reference. Once one is created, it should be adhered to in every lesson and maintained using [GLOSSARY-FORMAT.md](./GLOSSARY-FORMAT.md).
 
 ## `NOTES.md`
 
