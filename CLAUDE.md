@@ -28,3 +28,17 @@ Every `SKILL.md` is either user-invoked (`disable-model-invocation: true` plus `
 [`ask-matt`](./skills/engineering/ask-matt/SKILL.md) is the router that maps every user-reachable skill and how they relate. The same trigger that re-syncs a docs page applies to it: whenever you add, rename, remove, or change how a user-reachable skill fits the flows, re-read `ask-matt`'s `SKILL.md` and update it so the map stays accurate — a new skill it never mentions, or a stale one it still routes to, is a router that lies.
 
 The upstream-only `scripts/link-skills.sh` still links skills into `~/.claude/skills` and `~/.agents/skills`. Pi users install this repository as a package (`pi install <path-or-git-url>`); do not add `~/.pi` mutation to the upstream link script.
+
+## Agent skills
+
+### Issue tracker
+
+Issues are tracked in GitHub Issues for `MinhDuyDEV/md-matt`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The tracker uses the five default triage roles plus `bug`, `enhancement`, and Wayfinder labels. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+This repository uses a single-context domain-doc layout. See `docs/agents/domain.md`.
